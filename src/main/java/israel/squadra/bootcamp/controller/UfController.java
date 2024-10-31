@@ -1,7 +1,7 @@
-package israel.squadra_bootcamp.controller;
+package israel.squadra.bootcamp.controller;
 
-import israel.squadra_bootcamp.dto.request.UfRequestDTO;
-import israel.squadra_bootcamp.service.UfService;
+import israel.squadra.bootcamp.dto.request.UfRequestDTO;
+import israel.squadra.bootcamp.service.UfService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +33,7 @@ public class UfController {
     @PutMapping
     public ResponseEntity<List<UfRequestDTO>> update(@RequestBody UfRequestDTO ufRequestDTO) {
         List<UfRequestDTO> ufs = service.updateUf(ufRequestDTO);
-        return ResponseEntity.ok(ufs); // Retorna 200 OK com a lista atualizada
+        return ResponseEntity.ok(ufs);
     }
 
 

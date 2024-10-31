@@ -1,10 +1,10 @@
-package israel.squadra_bootcamp.service.impl;
+package israel.squadra.bootcamp.service.impl;
 
-import israel.squadra_bootcamp.controller.exception.DomainException;
-import israel.squadra_bootcamp.repository.UfRepository;
-import israel.squadra_bootcamp.service.UfService;
-import israel.squadra_bootcamp.dto.request.UfRequestDTO;
-import israel.squadra_bootcamp.model.Uf;
+import israel.squadra.bootcamp.controller.exception.DomainException;
+import israel.squadra.bootcamp.repository.UfRepository;
+import israel.squadra.bootcamp.service.UfService;
+import israel.squadra.bootcamp.dto.request.UfRequestDTO;
+import israel.squadra.bootcamp.model.Uf;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Example;
@@ -28,13 +28,8 @@ public class UfServiceImpl implements UfService {
     }
 
     @Override
-    public List<Uf> getUfs() {
+    public List<Uf> getAll() {
         return repository.findAll();
-    }
-
-    @Override
-    public List<Uf> getAll(Uf filter) {
-        return repository.findAll(Example.of(filter));
     }
 
     @Override
@@ -55,8 +50,8 @@ public class UfServiceImpl implements UfService {
                 .sigla(sigla)
                 .id(id)
                 .build();
+        List<Uf> filteredUfs = repository.findAll(Example.of(filter));
 
-        List<Uf> filteredUfs = getAll(filter);
         return filteredUfs.stream()
                 .map(uf -> modelMapper.map(uf, UfRequestDTO.class))
                 .collect(Collectors.toList());
@@ -70,8 +65,11 @@ public class UfServiceImpl implements UfService {
                 .nome(ufRequestDTO.getNome().trim())
                 .status(ufRequestDTO.getStatus())
                 .build();
-        create(entity); // Salva a entidade no repositório
-        return getAllUfs(null, null, null, null); // Retorna a lista atualizada de UFs
+        create(entity);
+
+        return getAll().stream()
+                .map(uf -> modelMapper.map(uf, UfRequestDTO.class))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -86,7 +84,8 @@ public class UfServiceImpl implements UfService {
 
         update(entity);
 
-        return getUfs().stream()
+        // Retorna a lista atualizada de UFs
+        return getAll().stream()
                 .map(uf -> modelMapper.map(uf, UfRequestDTO.class))
                 .collect(Collectors.toList());
     }

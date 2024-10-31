@@ -1,4 +1,4 @@
-package israel.squadra_bootcamp.controller.exception;
+package israel.squadra.bootcamp.controller.exception;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
@@ -13,7 +13,7 @@ public class ReturnErros {
     private String msg;
     private int status;
 
-    public ReturnErros (ResponseStatusException ex) {
+    public ReturnErros(ResponseStatusException ex) {
         this.msg = ex.getReason();
         this.status = ex.getStatusCode().value();
     }

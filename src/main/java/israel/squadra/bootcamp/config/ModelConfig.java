@@ -1,4 +1,4 @@
-package israel.squadra_bootcamp.config;
+package israel.squadra.bootcamp.config;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;

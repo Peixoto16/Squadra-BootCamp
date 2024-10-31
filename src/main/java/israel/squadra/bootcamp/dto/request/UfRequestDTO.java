@@ -1,4 +1,4 @@
-package israel.squadra_bootcamp.dto.request;
+package israel.squadra.bootcamp.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

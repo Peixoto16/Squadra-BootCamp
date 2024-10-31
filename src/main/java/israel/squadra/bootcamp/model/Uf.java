@@ -1,6 +1,6 @@
-package israel.squadra_bootcamp.model;
+package israel.squadra.bootcamp.model;
 
-import israel.squadra_bootcamp.dto.request.UfRequestDTO;
+import israel.squadra.bootcamp.dto.request.UfRequestDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
