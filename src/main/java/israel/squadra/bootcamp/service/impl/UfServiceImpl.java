@@ -2,6 +2,7 @@ package israel.squadra.bootcamp.service.impl;
 
 import israel.squadra.bootcamp.controller.exception.DomainException;
 import israel.squadra.bootcamp.repository.UfRepository;
+import israel.squadra.bootcamp.service.CheckValidate;
 import israel.squadra.bootcamp.service.UfService;
 import israel.squadra.bootcamp.dto.request.UfRequestDTO;
 import israel.squadra.bootcamp.model.Uf;
@@ -24,6 +25,7 @@ public class UfServiceImpl implements UfService {
 
     @Override
     public void create(Uf uf) {
+        validateCreateUf(uf);
         repository.save(uf);
     }
 
@@ -39,11 +41,12 @@ public class UfServiceImpl implements UfService {
 
     @Override
     public void update(Uf uf) {
+        validateUpdateUf(uf);
         repository.save(uf);
     }
 
     @Override
-    public List<UfRequestDTO> getAllUfs(String name, Integer status, String sigla, Integer id) {
+    public List<UfRequestDTO> getAllParamsUf(String name, Integer status, String sigla, Integer id) {
         Uf filter = Uf.builder()
                 .nome(name)
                 .status(status)
@@ -90,6 +93,42 @@ public class UfServiceImpl implements UfService {
                 .collect(Collectors.toList());
     }
 
+    private void validateCreateUf(Uf uf){
+
+        if (repository.existsBySigla(uf.getSigla())){
+            throw new DomainException("Já existe um estado com a sigla " + uf.getSigla() + ".");
+        }
+        if (repository.existsByNome(uf.getNome())){
+            throw new DomainException("Já existe um estado com o nome " + uf.getNome() + ".");
+        }
+
+        validateUf(uf);
+    }
+
+    private void validateUpdateUf(Uf uf){
+
+        if (repository.existsBySiglaAndIdNot(uf.getSigla(), uf.getId())){
+            throw new DomainException("Já existe um outro estado com a sigla " + uf.getSigla() + ".");
+        }
+        if (repository.existsByNomeAndIdNot(uf.getNome(), uf.getId())){
+            throw new DomainException("Já existe um outro estado com o nome " + uf.getNome() + ".");
+        }
+
+        validateUf(uf);
+    }
+
+    private void validateUf(Uf uf) {
+
+        CheckValidate.checkRequiredInitials(uf.getSigla());
+
+        CheckValidate.checkInitialsLength(uf.getSigla());
+
+        CheckValidate.checkRequiredName(uf.getNome());
+
+        CheckValidate.checkNameLength(uf.getNome(), 60);
+
+        CheckValidate.checkRequiredStatus(uf.getStatus());
+    }
 
 }
 

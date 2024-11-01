@@ -2,11 +2,13 @@ package israel.squadra.bootcamp.controller.exception;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.web.server.ResponseStatusException;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class ReturnErros {
 
     @JsonProperty("mensagem")
@@ -17,4 +19,5 @@ public class ReturnErros {
         this.msg = ex.getReason();
         this.status = ex.getStatusCode().value();
     }
+
 }

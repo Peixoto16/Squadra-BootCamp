@@ -16,12 +16,12 @@ public class UfController {
     private final UfService service;
 
     @GetMapping
-    public ResponseEntity<Object> getAll(@RequestParam(value = "nome", required = false) String name,
+    public ResponseEntity<Object> getAllParams(@RequestParam(value = "nome", required = false) String name,
                                          @RequestParam(value = "status", required = false) Integer status,
                                          @RequestParam(value = "sigla", required = false) String sigla,
                                          @RequestParam(value = "codigoUF", required = false) Integer id) {
-        List<UfRequestDTO> ufDtos = service.getAllUfs(name, status, sigla, id);
-        return ResponseEntity.ok(ufDtos);
+        List<UfRequestDTO> ufs = service.getAllParamsUf(name, status, sigla, id);
+        return ResponseEntity.ok(ufs);
     }
 
     @PostMapping

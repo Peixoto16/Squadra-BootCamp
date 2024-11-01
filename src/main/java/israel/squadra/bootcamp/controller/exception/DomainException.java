@@ -12,6 +12,7 @@ public class DomainException extends ResponseStatusException {
     }
 
     public DomainException(String message) {
+
         super(HttpStatus.BAD_REQUEST, message);
     }
 
