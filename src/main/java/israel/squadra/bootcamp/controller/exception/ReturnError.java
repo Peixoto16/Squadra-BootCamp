@@ -9,13 +9,13 @@ import org.springframework.web.server.ResponseStatusException;
 @Getter
 @Setter
 @NoArgsConstructor
-public class ReturnErros {
+public class ReturnError {
 
     @JsonProperty("mensagem")
     private String msg;
     private int status;
 
-    public ReturnErros(ResponseStatusException ex) {
+    public ReturnError(ResponseStatusException ex) {
         this.msg = ex.getReason();
         this.status = ex.getStatusCode().value();
     }
