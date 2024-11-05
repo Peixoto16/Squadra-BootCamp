@@ -33,7 +33,7 @@ public class CountyController {
            @RequestParam(value ="status", required = false) Integer status,
            @RequestParam(value ="codigoMunicipio", required = false) Integer id,
            @RequestParam(value = "codigoUF", required = false) Integer ufId) {
-       List<CountyRequestDTO> countys = service.getAllParamsMuni(nome, status, id, ufId);
+       List<CountyRequestDTO> countys = service.getAllParamsCounty(nome, status, id, ufId);
        return ResponseEntity.ok(countys);
    }
 

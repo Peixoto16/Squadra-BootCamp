@@ -24,4 +24,11 @@ public class ControllerAdviceApp {
         return new ResponseEntity<>(returnErros, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ReturnError> handleGeneralException(Exception ex) {
+        String message = "Ocorreu um erro interno no servidor. Por favor tente novamente !";
+        ReturnError apiErrors = new ReturnError(new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, message));
+        return new ResponseEntity<>(apiErrors, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
 }

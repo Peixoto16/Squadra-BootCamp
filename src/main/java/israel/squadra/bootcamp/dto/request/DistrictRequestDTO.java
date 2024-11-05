@@ -1,5 +1,6 @@
 package israel.squadra.bootcamp.dto.request;
 
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,19 +11,19 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UfRequestDTO {
+public class DistrictRequestDTO {
 
-
-    @JsonProperty("codigoUF")
+    @JsonProperty("codigoBairro")
     private Integer id;
+
+    @JsonProperty("codigoMunicipio")
+    private Integer countyId;
 
     @JsonProperty ("nome")
     private String nome;
-
-    @JsonProperty ("sigla")
-    private String sigla;
 
     @JsonProperty ("status")
     private Integer status;
 
 }
+

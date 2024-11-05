@@ -13,7 +13,7 @@ public interface CountyService {
     List<County> getAll();
     void update(County county);
     Optional<County> getById(Integer id);
-    List<CountyRequestDTO> getAllParamsMuni(String nome, Integer status, Integer ufId, Integer id);
+    List<CountyRequestDTO> getAllParamsCounty(String nome, Integer status, Integer ufId, Integer id);
     List<CountyRequestDTO> createCountys(CountyRequestDTO countyRequestDTO);
     List<CountyRequestDTO> updateCountys(CountyRequestDTO countyRequestDTO);
 }

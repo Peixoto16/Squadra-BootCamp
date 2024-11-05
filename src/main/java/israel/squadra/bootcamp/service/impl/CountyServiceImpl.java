@@ -49,16 +49,16 @@ public class CountyServiceImpl implements CountyService {
     }
 
     @Override
-    public List<CountyRequestDTO> getAllParamsMuni(String nome, Integer status, Integer id, Integer ufId) {
+    public List<CountyRequestDTO> getAllParamsCounty(String nome, Integer status, Integer id, Integer ufId) {
 
-        Uf countyEntity = null;
+        Uf ufEntity = null;
         if(ufId != null) {
-            countyEntity = ufService.getById(ufId).orElse(Uf.builder().id(ufId).build());
+            ufEntity = ufService.getById(ufId).orElse(Uf.builder().id(ufId).build());
         }
         County filter = County.builder()
                 .nome(nome)
                 .status(status)
-                .uf(countyEntity)
+                .uf(ufEntity)
                 .id(id)
                 .build();
         List<County> filteredCounty = repository.findAll(Example.of(filter));
@@ -112,10 +112,10 @@ public class CountyServiceImpl implements CountyService {
 
     private void validateCounty(County county) {
 
-        if (repository.existsByNomeAndUf(county.getNome(), county.getUf())){
-            throw new DomainException("Já existe uma cidade com o nome " + county.getNome()
-                    + " cadastrada no estado " + county.getUf().getNome()
-                    + ", não é possível ter duas cidades com mesmo nome no mesmo estado.");
+        if (repository.existsByNomeAndUf(county.getNome(), county.getUf())) {
+            throw new DomainException("Uma cidade com o nome " + county.getNome()
+                    + " já está cadastrada no estado " + county.getUf().getNome()
+                    + ". Não é permitido cadastrar duas cidades com o mesmo nome no mesmo estado.");
         }
 
         CheckValidate.checkRequiredName(county.getNome());
