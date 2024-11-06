@@ -5,7 +5,7 @@ import israel.squadra.bootcamp.dto.request.CountyRequestDTO;
 import israel.squadra.bootcamp.model.County;
 import israel.squadra.bootcamp.model.Uf;
 import israel.squadra.bootcamp.repository.CountyRepository;
-import israel.squadra.bootcamp.service.CheckValidate;
+import israel.squadra.bootcamp.service.excepValidate.CheckValidate;
 import israel.squadra.bootcamp.service.CountyService;
 import israel.squadra.bootcamp.service.UfService;
 import lombok.RequiredArgsConstructor;

@@ -2,7 +2,7 @@ package israel.squadra.bootcamp.service.impl;
 
 import israel.squadra.bootcamp.controller.exception.DomainException;
 import israel.squadra.bootcamp.repository.UfRepository;
-import israel.squadra.bootcamp.service.CheckValidate;
+import israel.squadra.bootcamp.service.excepValidate.CheckValidate;
 import israel.squadra.bootcamp.service.UfService;
 import israel.squadra.bootcamp.dto.request.UfRequestDTO;
 import israel.squadra.bootcamp.model.Uf;

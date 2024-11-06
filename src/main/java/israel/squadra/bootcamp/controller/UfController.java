@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/uf")
 @RequiredArgsConstructor
+@RequestMapping("/uf")
 public class UfController {
 
     private final UfService service;

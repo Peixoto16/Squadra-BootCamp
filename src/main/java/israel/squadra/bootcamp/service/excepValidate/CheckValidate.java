@@ -1,4 +1,4 @@
-package israel.squadra.bootcamp.service;
+package israel.squadra.bootcamp.service.excepValidate;
 
 import israel.squadra.bootcamp.controller.exception.DomainException;
 import org.springframework.util.StringUtils;
