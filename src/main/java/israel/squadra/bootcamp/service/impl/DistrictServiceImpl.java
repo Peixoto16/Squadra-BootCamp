@@ -34,6 +34,7 @@ public class DistrictServiceImpl implements DistrictService {
 
     @Override
     public List<District> getAll() {
+
         return repository.findAll();
     }
 

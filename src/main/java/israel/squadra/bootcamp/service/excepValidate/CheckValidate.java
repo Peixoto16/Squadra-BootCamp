@@ -1,6 +1,7 @@
 package israel.squadra.bootcamp.service.excepValidate;
 
 import israel.squadra.bootcamp.controller.exception.DomainException;
+import israel.squadra.bootcamp.model.Address;
 import org.springframework.util.StringUtils;
 
 public class CheckValidate {
@@ -82,6 +83,38 @@ public class CheckValidate {
             throw new DomainException("O login deve ter no máximo " + maxLength + " caracteres.");
         }
     }
+
+    public static void validateAddress(Address address) {
+
+        if (!StringUtils.hasText(address.getStreet())){
+            throw new DomainException("O campo 'Rua' é obrigatório.");
+        }
+
+        if (!StringUtils.hasText(address.getCep())){
+            throw new DomainException("O campo 'CEP' é obrigatório.");
+        }
+
+        if (!StringUtils.hasText(address.getNumber())){
+            throw new DomainException("O campo 'Número' é obrigatório.");
+        }
+
+        if (address.getStreet().length() > 256){
+            throw new DomainException("O campo 'Rua' deve conter no máximo 256 caracteres.");
+        }
+
+        if (address.getComplement().length() > 20){
+            throw new DomainException("O campo 'Complemento' deve conter no máximo 20 caracteres.");
+        }
+
+        if (address.getNumber().length() > 10){
+            throw new DomainException("O campo 'Número' deve conter no máximo 10 caracteres.");
+        }
+
+        if (address.getCep().length() > 10){
+            throw new DomainException("O campo 'CEP' deve conter no máximo 10 caracteres.");
+        }
+    }
+
 
 
 }

@@ -30,13 +30,5 @@ public class Uf {
     @Column(name = "STATUS")
     private Integer status;
 
-    public static UfRequestDTO retornoDTO(Uf uf) {
-        return UfRequestDTO.builder()
-                .id(uf.getId())
-                .sigla(uf.getSigla())
-                .nome(uf.getNome())
-                .status(uf.getStatus())
-                .build();
-    }
 
 }

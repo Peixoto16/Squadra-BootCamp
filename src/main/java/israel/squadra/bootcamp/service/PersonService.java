@@ -1,16 +1,14 @@
 package israel.squadra.bootcamp.service;
 
 import israel.squadra.bootcamp.dto.request.PersonRequestDTO;
-import israel.squadra.bootcamp.dto.request.UfRequestDTO;
 import israel.squadra.bootcamp.model.Person;
-import israel.squadra.bootcamp.model.Uf;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface PersonService {
 
-    void create(Person person);
+    Person create(Person person);
     List<Person> getAll();
     void update(Person person);
     Optional<Person> getById(Integer id);
