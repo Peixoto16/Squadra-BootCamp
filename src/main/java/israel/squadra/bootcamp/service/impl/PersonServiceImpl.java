@@ -14,9 +14,11 @@ import israel.squadra.bootcamp.service.PersonService;
 import israel.squadra.bootcamp.service.excepValidate.CheckValidate;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -32,6 +34,7 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public Person create(Person person) {
+        validatePerson(person);
       return repository.save(person);
     }
 
@@ -51,8 +54,35 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public List<PersonRequestDTO> getAllParamsPerson(Integer id, String name, String lastName, Integer age, String login, String password, Integer status) {
-        return null;
+    public Object getAllParamsPerson(Integer id, String nome, String lastName, Integer age, String login, String password, Integer status) {
+
+        Person filter = Person.builder()
+                .id(id)
+                .nome(nome)
+                .lastName(lastName)
+                .age(age)
+                .login(login)
+                .password(password)
+                .status(status)
+                .build();
+        List<Person> personFilter = repository.findAll(Example.of(filter));
+
+
+        if (!personFilter.isEmpty() && isPersonFilterByOnlyId(filter)) {
+            return personFilter.stream().findFirst().map(Person::toDTOWithAddress);
+        }
+
+        return personFilter.stream()
+                .map(Person::toDTO);
+    }
+
+    private boolean isPersonFilterByOnlyId(Person filter) {
+        return filter.getId() != null && (Objects.isNull(filter.getNome())
+                && Objects.isNull(filter.getLastName())
+                && Objects.isNull(filter.getAge())
+                && Objects.isNull(filter.getLogin())
+                && Objects.isNull(filter.getPassword())
+                && Objects.isNull(filter.getStatus()));
     }
 
     @Override
@@ -68,16 +98,16 @@ public class PersonServiceImpl implements PersonService {
                 .build();
         Person person = create(entity);
 
-        List<Address> addresses = personRequestDTO.getAddressDTOs().stream()
-                .map(address -> createAddress(address, person))
+        List<Address> addresses = personRequestDTO.getAddressRequestDTO().stream()
+                .map(ad -> createAddress(ad, person))
                 .peek(CheckValidate::validateAddress)
                 .collect(Collectors.toList());
 
         person.setAddress(addresses);
-        update(entity);
+        update(person);
 
         return getAll().stream()
-                .map(p -> modelMapper.map(p, PersonRequestDTO.class))
+                .map(Person::toDTO)
                 .collect(Collectors.toList());
     }
 
@@ -88,20 +118,57 @@ public class PersonServiceImpl implements PersonService {
     }
 
 
+
+
+    private void validatePerson(Person person){
+
+        if ((person.getId() == null && repository.existsByLogin(person.getLogin())) ||
+                (repository.existsByLoginAndId(person.getLogin(), person.getId()))) {
+
+            throw new DomainException("Login " + person.getLogin()
+                    + " já existe, impossível cadastrar.");
+        }
+
+        CheckValidate.checkRequiredName(person.getNome());
+
+        CheckValidate.checkRequiredLastName(person.getLastName());
+
+        CheckValidate.checkRequiredAge(person.getAge());
+
+        CheckValidate.checkRequiredLogin(person.getLogin());
+
+        CheckValidate.checkRequiredPassword(person.getPassword());
+
+        CheckValidate.checkLastNameLength(person.getNome(), 256);
+
+        CheckValidate.checkLastNameLength(person.getLastName(), 256);
+
+        CheckValidate.checkAgeLimit(person.getAge());
+
+        CheckValidate.checkLoginLength(person.getLogin(), 50);
+
+        CheckValidate.checkPasswordLength(person.getPassword(), 50);
+
+        CheckValidate.checkRequiredStatus(person.getStatus());
+    }
+
+
     private Address createAddress(AddressRequestDTO addressRequestDTO, Person person) {
         District district = districtService.getById(addressRequestDTO.getDistrictId())
-                .orElseThrow(() -> new DomainException("Não existe registro com o código Bairro "
-                        + addressRequestDTO.getDistrictId()));
+                .orElseThrow(() -> new DomainException("Registro com o código Bairro "
+                        + addressRequestDTO.getDistrictId() + " não existe"));
 
         return Address.builder()
                 .person(person)
                 .district(district)
-                .number(addressRequestDTO.getNumber())
                 .street(addressRequestDTO.getStreet())
+                .number(addressRequestDTO.getNumber())
                 .complement(addressRequestDTO.getComplement())
                 .cep(addressRequestDTO.getCep())
                 .build();
     }
+
+
 
 
 }

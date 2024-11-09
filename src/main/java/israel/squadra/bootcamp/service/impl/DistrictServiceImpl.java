@@ -50,7 +50,7 @@ public class DistrictServiceImpl implements DistrictService {
     }
 
     @Override
-    public List<DistrictRequestDTO> getAllParamsDistrict(String nome, Integer status, Integer countyId, Integer id) {
+    public Object getAllParamsDistrict(String nome, Integer status, Integer countyId, Integer id) {
         County countyEntity = null;
 
         if(countyId != null) {

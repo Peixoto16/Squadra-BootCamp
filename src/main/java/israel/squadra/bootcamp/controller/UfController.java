@@ -20,7 +20,7 @@ public class UfController {
                                          @RequestParam(value = "status", required = false) Integer status,
                                          @RequestParam(value = "sigla", required = false) String sigla,
                                          @RequestParam(value = "codigoUF", required = false) Integer id) {
-        List<UfRequestDTO> ufs = service.getAllParamsUf(name, status, sigla, id);
+        Object ufs = service.getAllParamsUf(name, status, sigla, id);
         return ResponseEntity.ok(ufs);
     }
 

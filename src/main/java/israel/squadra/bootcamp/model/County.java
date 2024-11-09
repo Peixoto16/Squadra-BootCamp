@@ -1,5 +1,6 @@
 package israel.squadra.bootcamp.model;
 
+import israel.squadra.bootcamp.dto.response.CountyResponseDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,4 +31,14 @@ public class County {
     @Column(name = "STATUS")
     private Integer status;
 
+
+    public static CountyResponseDTO toGetDTO(County county) {
+        return CountyResponseDTO.builder()
+                .id(county.getId())
+                .nome(county.getNome())
+                .ufRequestDTO(Uf.toGetDTO(county.getUf()))
+                .ufId(county.getUf().getId())
+                //.status(county.getStatus())
+                .build();
+    }
 }

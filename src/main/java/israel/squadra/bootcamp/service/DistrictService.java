@@ -14,7 +14,7 @@ public interface DistrictService {
     List<District> getAll();
     void update(District district);
     Optional<District> getById(Integer id);
-    List<DistrictRequestDTO> getAllParamsDistrict(String nome, Integer status, Integer countyId, Integer id);
+    Object getAllParamsDistrict(String nome, Integer status, Integer countyId, Integer id);
     List<DistrictRequestDTO> createDistrict(DistrictRequestDTO districtRequestDTO);
     List<DistrictRequestDTO> updateDistrict(DistrictRequestDTO districtRequestDTO);
 

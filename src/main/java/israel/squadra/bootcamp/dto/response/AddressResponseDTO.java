@@ -1,4 +1,4 @@
-package israel.squadra.bootcamp.dto.request;
+package israel.squadra.bootcamp.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -7,20 +7,19 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class AddressRequestDTO {
-
+public class AddressResponseDTO {
 
     @JsonProperty("codigoEndereco")
     private Integer id;
 
-    @JsonProperty("codigoPessoa")
-    private Integer personId;
-
     @JsonProperty("codigoBairro")
     private Integer districtId;
+
+    @JsonProperty("codigoPessoa")
+    private Integer personId;
 
     @JsonProperty("nomeRua")
     private String street;
@@ -34,5 +33,6 @@ public class AddressRequestDTO {
     @JsonProperty("cep")
     private String cep;
 
-
+    @JsonProperty("bairro")
+    private DistrictResponseDTO districtResponseDTO;
 }

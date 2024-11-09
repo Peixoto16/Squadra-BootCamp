@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -37,5 +36,6 @@ public class PersonRequestDTO {
     private Integer status;
 
     @JsonProperty("enderecos")
-    private List<AddressRequestDTO> addressDTOs;
+    private List<AddressRequestDTO> addressRequestDTO;
+
 }

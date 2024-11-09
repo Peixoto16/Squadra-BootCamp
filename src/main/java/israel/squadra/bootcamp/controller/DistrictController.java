@@ -29,7 +29,7 @@ public class DistrictController {
                                           @RequestParam(value ="status", required = false) Integer status,
                                           @RequestParam(value ="codigoMunicipio", required = false) Integer countyId,
                                           @RequestParam(value = "codigoBairro", required = false) Integer id) {
-        List<DistrictRequestDTO> districts = service.getAllParamsDistrict(nome, status, countyId, id);
+        Object districts = service.getAllParamsDistrict(nome, status, countyId, id);
         return ResponseEntity.ok(districts);
     }
 

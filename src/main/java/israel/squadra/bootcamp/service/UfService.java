@@ -11,7 +11,7 @@ public interface UfService {
     List<Uf> getAll();
     void update(Uf uf);
     Optional<Uf> getById(Integer id);
-    List<UfRequestDTO> getAllParamsUf(String name, Integer status, String sigla, Integer id);
+    Object getAllParamsUf(String name, Integer status, String sigla, Integer id);
     List<UfRequestDTO> createUf(UfRequestDTO ufRequestDTO);
     List<UfRequestDTO> updateUf(UfRequestDTO ufRequestDTO);
 

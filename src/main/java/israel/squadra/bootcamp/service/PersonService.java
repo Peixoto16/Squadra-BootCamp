@@ -12,7 +12,7 @@ public interface PersonService {
     List<Person> getAll();
     void update(Person person);
     Optional<Person> getById(Integer id);
-    List<PersonRequestDTO> getAllParamsPerson(Integer id, String name, String lastName, Integer age, String login,String password,Integer status);
+    Object getAllParamsPerson(Integer id, String name, String lastName, Integer age, String login, String password, Integer status);
     List<PersonRequestDTO> createPerson(PersonRequestDTO personRequestDTO);
     List<PersonRequestDTO> updatePerson(PersonRequestDTO personRequestDTO);
 

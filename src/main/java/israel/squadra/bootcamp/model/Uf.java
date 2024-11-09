@@ -21,14 +21,22 @@ public class Uf {
     @Column(name = "CODIGO_UF")
     private Integer id;
 
-    @Column(name = "NOME")
-    private String nome;
-
     @Column(name = "SIGLA")
     private String sigla;
+
+    @Column(name = "NOME")
+    private String nome;
 
     @Column(name = "STATUS")
     private Integer status;
 
 
+    public static UfRequestDTO toGetDTO(Uf uf) {
+        return UfRequestDTO.builder()
+                .id(uf.getId())
+                .sigla(uf.getSigla())
+                .nome(uf.getNome())
+                .status(uf.getStatus())
+                .build();
+    }
 }

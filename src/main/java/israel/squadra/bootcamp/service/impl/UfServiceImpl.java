@@ -46,7 +46,7 @@ public class UfServiceImpl implements UfService {
     }
 
     @Override
-    public List<UfRequestDTO> getAllParamsUf(String nome, Integer status, String sigla, Integer id) {
+    public Object getAllParamsUf(String nome, Integer status, String sigla, Integer id) {
         Uf filter = Uf.builder()
                 .nome(nome)
                 .status(status)

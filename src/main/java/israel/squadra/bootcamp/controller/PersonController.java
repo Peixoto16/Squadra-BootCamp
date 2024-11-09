@@ -1,27 +1,42 @@
 package israel.squadra.bootcamp.controller;
 
+import israel.squadra.bootcamp.dto.request.DistrictRequestDTO;
 import israel.squadra.bootcamp.dto.request.PersonRequestDTO;
+import israel.squadra.bootcamp.dto.response.PersonResponseDTO;
 import israel.squadra.bootcamp.service.PersonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(name = "/pessoa")
+@RequestMapping("/pessoa")
 public class PersonController {
 
     private final PersonService service;
 
 
     @PostMapping
-    public ResponseEntity<List<PersonRequestDTO>> create(@RequestBody PersonRequestDTO personRequestDTO){
+    public ResponseEntity <List<PersonRequestDTO>> create(@RequestBody PersonRequestDTO personRequestDTO){
         List<PersonRequestDTO> persons = service.createPerson(personRequestDTO);
         return ResponseEntity.ok(persons);
     }
+
+
+    @GetMapping
+    ResponseEntity <Object> getAll(@RequestParam(value = "codigoPessoa", required = false) Integer id,
+                                               @RequestParam(value = "nome", required = false) String nome,
+                                               @RequestParam(value = "sobrenome", required = false) String lastName,
+                                               @RequestParam(value = "idade", required = false) Integer age,
+                                               @RequestParam(value = "login", required = false) String login,
+                                               @RequestParam(value = "senha", required = false) String password,
+                                               @RequestParam(value ="status", required = false) Integer status){
+        Object persons = service.getAllParamsPerson(id, nome, lastName, age, login, password, status);
+        return ResponseEntity.ok(persons);
+    }
+
+
+
 }

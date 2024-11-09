@@ -49,7 +49,7 @@ public class CountyServiceImpl implements CountyService {
     }
 
     @Override
-    public List<CountyRequestDTO> getAllParamsCounty(String nome, Integer status, Integer id, Integer ufId) {
+    public Object getAllParamsCounty(String nome, Integer status, Integer id, Integer ufId) {
 
         Uf ufEntity = null;
         if(ufId != null) {

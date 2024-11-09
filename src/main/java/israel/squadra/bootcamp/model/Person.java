@@ -1,13 +1,17 @@
 package israel.squadra.bootcamp.model;
 
+import israel.squadra.bootcamp.dto.request.PersonRequestDTO;
+import israel.squadra.bootcamp.dto.response.PersonResponseDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.util.CollectionUtils;
-
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
 
 @Data
 @AllArgsConstructor
@@ -51,5 +55,34 @@ public class Person {
         }
         this.address = address;
     }
+
+    public static PersonRequestDTO toDTO(Person person){
+
+        return PersonRequestDTO.builder()
+                .id(person.getId())
+                .nome(person.getNome())
+                .lastName(person.getLastName())
+                .age(person.getAge())
+                .login(person.getLogin())
+                .password(person.getPassword())
+                .status(person.getStatus())
+                .addressRequestDTO(new ArrayList<>())
+                .build();
+    }
+
+    public static PersonResponseDTO toDTOWithAddress(Person person) {
+        return PersonResponseDTO.builder()
+                .id(person.getId())
+                .nome(person.getNome())
+                .lastName(person.getLastName())
+                .age(person.getAge())
+                .login(person.getLogin())
+                .password(person.getPassword())
+                .status(person.getStatus())
+                .addressResponseDTOs(person.getAddress().stream()
+                        .map(Address::toGetDTO).collect(Collectors.toList()))
+                .build();
+    }
+
 
 }

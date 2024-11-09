@@ -1,5 +1,7 @@
 package israel.squadra.bootcamp.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import israel.squadra.bootcamp.dto.response.AddressResponseDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,12 +37,24 @@ public class Address {
     @Column(name = "NOME_RUA")
     private String street;
 
-    @Column(name = "CEP")
-    private String cep;
-
     @Column(name = "COMPLEMENTO")
     private String complement;
 
+    @Column(name = "CEP")
+    private String cep;
 
+
+    public static AddressResponseDTO toGetDTO(Address address) {
+        return AddressResponseDTO.builder()
+                .id(address.getId())
+                .districtId(address.getDistrict().getId())
+                .personId(address.getPerson().getId())
+                .street(address.getStreet())
+                .number(address.getNumber())
+                .complement(address.getComplement())
+                .cep(address.getCep())
+                .districtResponseDTO(District.toGetDTO(address.getDistrict()))
+                .build();
+    }
 
 }
