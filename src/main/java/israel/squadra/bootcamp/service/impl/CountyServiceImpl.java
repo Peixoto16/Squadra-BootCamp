@@ -51,19 +51,19 @@ public class CountyServiceImpl implements CountyService {
     @Override
     public Object getAllParamsCounty(String nome, Integer status, Integer id, Integer ufId) {
 
-        Uf ufEntity = null;
+        Uf ufModel = null;
         if(ufId != null) {
-            ufEntity = ufService.getById(ufId).orElse(Uf.builder().id(ufId).build());
+            ufModel = ufService.getById(ufId).orElse(Uf.builder().id(ufId).build());
         }
-        County filter = County.builder()
+        County select = County.builder()
                 .nome(nome)
                 .status(status)
-                .uf(ufEntity)
+                .uf(ufModel)
                 .id(id)
                 .build();
-        List<County> filteredCounty = repository.findAll(Example.of(filter));
+        List<County> selectCounty = repository.findAll(Example.of(select));
 
-        return filteredCounty.stream()
+        return selectCounty.stream()
                 .map(county -> modelMapper.map(county, CountyRequestDTO.class))
                 .collect(Collectors.toList());
     }
@@ -71,17 +71,16 @@ public class CountyServiceImpl implements CountyService {
     @Override
     public List<CountyRequestDTO> createCountys(CountyRequestDTO countyRequestDTO) {
 
-        System.out.println(countyRequestDTO.getUfId());
-        Uf ufEntity = ufService.getById(countyRequestDTO.getUfId())
+        Uf ufModel = ufService.getById(countyRequestDTO.getUfId())
                 .orElseThrow(() -> new DomainException("Não existe registro com o código UF "
                         + countyRequestDTO.getUfId(), HttpStatus.NOT_FOUND));
 
-        County entity = County.builder()
+        County model = County.builder()
                 .nome(countyRequestDTO.getNome().trim())
-                .uf(ufEntity)
+                .uf(ufModel)
                 .status(countyRequestDTO.getStatus())
                 .build();
-        create(entity);
+        create(model);
 
         return getAll().stream()
                 .map(county -> modelMapper.map(county, CountyRequestDTO.class))
@@ -91,18 +90,18 @@ public class CountyServiceImpl implements CountyService {
     @Override
     public List<CountyRequestDTO> updateCountys(CountyRequestDTO countyRequestDTO) {
 
-        County entity = getById(countyRequestDTO.getId())
+        County model = getById(countyRequestDTO.getId())
                 .orElseThrow( () -> new DomainException("Não existe registro com o código Municipio "
                         + countyRequestDTO.getId(), HttpStatus.NOT_FOUND));
 
-        Uf ufEntity = ufService.getById(countyRequestDTO.getUfId())
+        Uf ufModel = ufService.getById(countyRequestDTO.getUfId())
                 .orElseThrow(() -> new DomainException("Não existe registro com o código UF " + countyRequestDTO.getUfId(),
                         HttpStatus.NOT_FOUND));
 
-        entity.setUf(ufEntity);
-        entity.setNome(countyRequestDTO.getNome().trim());
-        entity.setStatus(countyRequestDTO.getStatus());
-        update(entity);
+        model.setUf(ufModel);
+        model.setNome(countyRequestDTO.getNome().trim());
+        model.setStatus(countyRequestDTO.getStatus());
+        update(model);
 
         return getAll().stream()
                 .map(county -> modelMapper.map(county, CountyRequestDTO.class))
@@ -123,6 +122,7 @@ public class CountyServiceImpl implements CountyService {
         CheckValidate.checkNameLength(county.getNome(), 256);
 
         CheckValidate.checkRequiredStatus(county.getStatus());
+
     }
 
 

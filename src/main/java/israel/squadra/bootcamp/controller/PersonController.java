@@ -26,7 +26,7 @@ public class PersonController {
 
 
     @GetMapping
-    ResponseEntity <Object> getAll(@RequestParam(value = "codigoPessoa", required = false) Integer id,
+    public ResponseEntity <Object> getAll(@RequestParam(value = "codigoPessoa", required = false) Integer id,
                                                @RequestParam(value = "nome", required = false) String nome,
                                                @RequestParam(value = "sobrenome", required = false) String lastName,
                                                @RequestParam(value = "idade", required = false) Integer age,
@@ -37,6 +37,11 @@ public class PersonController {
         return ResponseEntity.ok(persons);
     }
 
+    @PutMapping
+    public ResponseEntity <List<PersonRequestDTO>> update(@RequestBody PersonRequestDTO personRequestDTO){
+        List<PersonRequestDTO> persons = service.updatePerson(personRequestDTO);
+        return ResponseEntity.ok(persons);
+    }
 
 
 }

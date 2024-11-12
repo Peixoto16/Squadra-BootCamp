@@ -51,22 +51,22 @@ public class DistrictServiceImpl implements DistrictService {
 
     @Override
     public Object getAllParamsDistrict(String nome, Integer status, Integer countyId, Integer id) {
-        County countyEntity = null;
+        County countyModel = null;
 
         if(countyId != null) {
-            countyEntity = countyService.getById(countyId).orElse(County.builder().id(countyId).build());
+            countyModel = countyService.getById(countyId).orElse(County.builder().id(countyId).build());
         }
 
-        District filter = District.builder()
+        District select = District.builder()
                 .nome(nome)
                 .status(status)
-                .county(countyEntity)
+                .county(countyModel)
                 .id(id)
                 .build();
 
-        List<District> filteredDistrict = repository.findAll(Example.of(filter));
+        List<District> selectDistrict = repository.findAll(Example.of(select));
 
-        return filteredDistrict.stream()
+        return selectDistrict.stream()
                 .map(district -> modelMapper.map(district, DistrictRequestDTO.class))
                 .collect(Collectors.toList());
     }
@@ -74,16 +74,16 @@ public class DistrictServiceImpl implements DistrictService {
     @Override
     public List<DistrictRequestDTO> createDistrict(DistrictRequestDTO districtRequestDTO) {
 
-        County countyEntity = countyService.getById(districtRequestDTO.getCountyId())
+        County countyModel = countyService.getById(districtRequestDTO.getCountyId())
                 .orElseThrow(() -> new DomainException("Não existe registro com o código Município "
                         + districtRequestDTO.getCountyId(), HttpStatus.NOT_FOUND));
 
-        District entity = District.builder()
+        District model = District.builder()
                 .nome(districtRequestDTO.getNome().trim())
-                .county(countyEntity)
+                .county(countyModel)
                 .status(districtRequestDTO.getStatus())
                 .build();
-        create(entity);
+        create(model);
 
         return getAll().stream()
                 .map(district -> modelMapper.map(district, DistrictRequestDTO.class))
@@ -92,18 +92,18 @@ public class DistrictServiceImpl implements DistrictService {
 
     @Override
     public List<DistrictRequestDTO> updateDistrict(DistrictRequestDTO districtRequestDTO) {
-        District entity = getById(districtRequestDTO.getId())
+        District model = getById(districtRequestDTO.getId())
                 .orElseThrow( () -> new DomainException("Não existe registro com o código Bairro "
                         + districtRequestDTO.getId(), HttpStatus.NOT_FOUND));
 
-        County countyEntity = countyService.getById(districtRequestDTO.getCountyId())
+        County countyModel = countyService.getById(districtRequestDTO.getCountyId())
                 .orElseThrow( () -> new DomainException("Não existe registro com o código Municipio "
                         + districtRequestDTO.getCountyId(), HttpStatus.NOT_FOUND));
 
-        entity.setCounty(countyEntity);
-        entity.setNome(districtRequestDTO.getNome().trim());
-        entity.setStatus(districtRequestDTO.getStatus());
-        update(entity);
+        model.setCounty(countyModel);
+        model.setNome(districtRequestDTO.getNome().trim());
+        model.setStatus(districtRequestDTO.getStatus());
+        update(model);
 
         return getAll().stream()
                 .map(district -> modelMapper.map(district, DistrictRequestDTO.class))

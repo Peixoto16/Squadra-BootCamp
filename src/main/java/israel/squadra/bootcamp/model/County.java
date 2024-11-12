@@ -38,7 +38,7 @@ public class County {
                 .nome(county.getNome())
                 .ufRequestDTO(Uf.toGetDTO(county.getUf()))
                 .ufId(county.getUf().getId())
-                //.status(county.getStatus())
+                .status(county.getStatus())
                 .build();
     }
 }

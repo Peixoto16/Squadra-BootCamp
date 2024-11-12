@@ -7,7 +7,7 @@ import java.util.List;
 public interface AddressService {
     void create(List<Address> address);
 
-    List<Address> findAll(List<Integer> codigos);
+    List<Address> findAll(List<Integer> listAdd);
 
     void delete(List<Address> addressToRemove);
 }

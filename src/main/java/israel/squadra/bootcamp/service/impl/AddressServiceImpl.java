@@ -20,12 +20,14 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public List<Address> findAll(List<Integer> codigos) {
+    public List<Address> findAll(List<Integer> listAdd) {
+
         return repository.findAll();
     }
 
     @Override
-    public void delete(List<Address> addressToRemove) {
-        repository.deleteAll(addressToRemove);
+    public void delete(List<Address> address) {
+
+        address.forEach(repository::delete);
     }
 }

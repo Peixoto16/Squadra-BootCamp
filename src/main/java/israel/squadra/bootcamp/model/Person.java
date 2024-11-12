@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 @Table(name = "TB_PESSOA")
 public class Person {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "generator_person")
     @SequenceGenerator(name = "generator_person", allocationSize = 1, sequenceName = "PESSOA_SEQUENCE")

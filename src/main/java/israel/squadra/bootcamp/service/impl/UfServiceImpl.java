@@ -47,28 +47,28 @@ public class UfServiceImpl implements UfService {
 
     @Override
     public Object getAllParamsUf(String nome, Integer status, String sigla, Integer id) {
-        Uf filter = Uf.builder()
+        Uf select = Uf.builder()
                 .nome(nome)
                 .status(status)
                 .sigla(sigla)
                 .id(id)
                 .build();
-        List<Uf> filteredUfs = repository.findAll(Example.of(filter));
+        List<Uf> selectUfs = repository.findAll(Example.of(select));
 
-        return filteredUfs.stream()
+        return selectUfs.stream()
                 .map(uf -> modelMapper.map(uf, UfRequestDTO.class))
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<UfRequestDTO> createUf(UfRequestDTO ufRequestDTO) {
-        Uf entity = Uf.builder()
+        Uf model = Uf.builder()
                 .id(ufRequestDTO.getId())
                 .sigla(ufRequestDTO.getSigla().trim())
                 .nome(ufRequestDTO.getNome().trim())
                 .status(ufRequestDTO.getStatus())
                 .build();
-        create(entity);
+        create(model);
 
         return getAll().stream()
                 .map(uf -> modelMapper.map(uf, UfRequestDTO.class))
@@ -77,17 +77,16 @@ public class UfServiceImpl implements UfService {
 
     @Override
     public List<UfRequestDTO> updateUf(UfRequestDTO ufRequestDTO) {
-        Uf entity = getById(ufRequestDTO.getId())
+        Uf model = getById(ufRequestDTO.getId())
                 .orElseThrow(() -> new DomainException("Não existe registro com o código UF " + ufRequestDTO.getId(),
                         HttpStatus.NOT_FOUND));
 
-        entity.setNome(ufRequestDTO.getNome());
-        entity.setSigla(ufRequestDTO.getSigla());
-        entity.setStatus(ufRequestDTO.getStatus());
+        model.setNome(ufRequestDTO.getNome());
+        model.setSigla(ufRequestDTO.getSigla());
+        model.setStatus(ufRequestDTO.getStatus());
 
-        update(entity);
+        update(model);
 
-        // Retorna a lista atualizada de UFs
         return getAll().stream()
                 .map(uf -> modelMapper.map(uf, UfRequestDTO.class))
                 .collect(Collectors.toList());

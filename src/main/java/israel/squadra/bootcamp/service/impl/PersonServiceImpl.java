@@ -30,7 +30,6 @@ public class PersonServiceImpl implements PersonService {
     private final PersonRepository repository;
     private final AddressService addressService;
     private final DistrictService districtService;
-    private final ModelMapper modelMapper;
 
     @Override
     public Person create(Person person) {
@@ -45,6 +44,7 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public void update(Person person) {
+        validatePerson(person);
         repository.save(person);
     }
 
@@ -56,7 +56,7 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public Object getAllParamsPerson(Integer id, String nome, String lastName, Integer age, String login, String password, Integer status) {
 
-        Person filter = Person.builder()
+        Person select = Person.builder()
                 .id(id)
                 .nome(nome)
                 .lastName(lastName)
@@ -65,30 +65,30 @@ public class PersonServiceImpl implements PersonService {
                 .password(password)
                 .status(status)
                 .build();
-        List<Person> personFilter = repository.findAll(Example.of(filter));
+        List<Person> selectPerson = repository.findAll(Example.of(select));
 
 
-        if (!personFilter.isEmpty() && isPersonFilterByOnlyId(filter)) {
-            return personFilter.stream().findFirst().map(Person::toDTOWithAddress);
+        if (!selectPerson.isEmpty() && isPersonFilterByOnlyId(select)) {
+            return selectPerson.stream().findFirst().map(Person::toDTOWithAddress);
         }
 
-        return personFilter.stream()
+        return selectPerson.stream()
                 .map(Person::toDTO);
     }
 
-    private boolean isPersonFilterByOnlyId(Person filter) {
-        return filter.getId() != null && (Objects.isNull(filter.getNome())
-                && Objects.isNull(filter.getLastName())
-                && Objects.isNull(filter.getAge())
-                && Objects.isNull(filter.getLogin())
-                && Objects.isNull(filter.getPassword())
-                && Objects.isNull(filter.getStatus()));
+    private boolean isPersonFilterByOnlyId(Person select) {
+        return select.getId() != null && (Objects.isNull(select.getNome())
+                && Objects.isNull(select.getLastName())
+                && Objects.isNull(select.getAge())
+                && Objects.isNull(select.getLogin())
+                && Objects.isNull(select.getPassword())
+                && Objects.isNull(select.getStatus()));
     }
 
     @Override
     public List<PersonRequestDTO> createPerson(PersonRequestDTO personRequestDTO) {
 
-        Person entity = Person.builder()
+        Person model = Person.builder()
                 .nome(personRequestDTO.getNome())
                 .lastName(personRequestDTO.getLastName())
                 .age(personRequestDTO.getAge())
@@ -96,7 +96,7 @@ public class PersonServiceImpl implements PersonService {
                 .password(personRequestDTO.getPassword())
                 .status(personRequestDTO.getStatus())
                 .build();
-        Person person = create(entity);
+        Person person = create(model);
 
         List<Address> addresses = personRequestDTO.getAddressRequestDTO().stream()
                 .map(ad -> createAddress(ad, person))
@@ -114,11 +114,78 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public List<PersonRequestDTO> updatePerson(PersonRequestDTO personRequestDTO) {
 
-        return null;
+        Person model = getById(personRequestDTO.getId())
+                .orElseThrow(() -> new DomainException("Não existe registro com o código Pessoa "
+                        + personRequestDTO.getId()));
+
+        model.setNome(personRequestDTO.getNome());
+        model.setLastName(personRequestDTO.getLastName());
+        model.setAge(personRequestDTO.getAge());
+        model.setLogin(personRequestDTO.getLogin());
+        model.setPassword(personRequestDTO.getPassword());
+        model.setStatus(personRequestDTO.getStatus());
+
+        List<Address> addresses = personRequestDTO.getAddressRequestDTO().stream()
+                .map(dto -> createOrUpdate(model, dto))  // Cria ou atualiza o endereço
+                .peek(CheckValidate::validateAddress)    // Valida o endereço
+                .collect(Collectors.toList());
+
+        List<Address> addressToRemove = model.getAddress().stream()
+                .filter(address -> !addresses.contains(address))
+                .collect(Collectors.toList());
+
+        model.getAddress().removeAll(addressToRemove);
+
+        addressService.delete(addressToRemove);
+
+        model.getAddress().addAll(addresses);
+        update(model);
+
+        return getAll().stream()
+                .map(Person::toDTO)
+                .collect(Collectors.toList());
     }
 
+    private Address createOrUpdate(Person model, AddressRequestDTO requestDTO) {
 
+        if (requestDTO.getId() == null || requestDTO.getId() == 0) {
+            return createAddress(requestDTO, model);
+        }
 
+        return updateAddress(requestDTO, model.getAddress());
+    }
+
+    private Address updateAddress(AddressRequestDTO addressRequestDTO, List<Address> addresses) {
+        District district = districtService.getById(addressRequestDTO.getDistrictId())
+                .orElseThrow(() -> new DomainException("Registro com o código Bairro "
+                        + addressRequestDTO.getDistrictId() + " não existe"));
+
+        return addresses.stream()
+                .filter(address -> address.getId().equals(addressRequestDTO.getId()))
+                .peek(a -> {
+                    a.setDistrict(district);
+                    a.setCep(addressRequestDTO.getCep());
+                    a.setComplement(addressRequestDTO.getComplement());
+                    a.setNumber(addressRequestDTO.getNumber());
+                    a.setStreet(addressRequestDTO.getStreet());
+                }).findFirst()
+                .orElseThrow(() -> new DomainException("Erro ao tentar atualizar os endereços"));
+    }
+
+    private Address createAddress(AddressRequestDTO addressRequestDTO, Person person) {
+        District district = districtService.getById(addressRequestDTO.getDistrictId())
+                .orElseThrow(() -> new DomainException("Registro com o código Bairro "
+                        + addressRequestDTO.getDistrictId() + " não existe"));
+
+        return Address.builder()
+                .person(person)
+                .district(district)
+                .street(addressRequestDTO.getStreet())
+                .number(addressRequestDTO.getNumber())
+                .complement(addressRequestDTO.getComplement())
+                .cep(addressRequestDTO.getCep())
+                .build();
+    }
 
     private void validatePerson(Person person){
 
@@ -152,21 +219,6 @@ public class PersonServiceImpl implements PersonService {
         CheckValidate.checkRequiredStatus(person.getStatus());
     }
 
-
-    private Address createAddress(AddressRequestDTO addressRequestDTO, Person person) {
-        District district = districtService.getById(addressRequestDTO.getDistrictId())
-                .orElseThrow(() -> new DomainException("Registro com o código Bairro "
-                        + addressRequestDTO.getDistrictId() + " não existe"));
-
-        return Address.builder()
-                .person(person)
-                .district(district)
-                .street(addressRequestDTO.getStreet())
-                .number(addressRequestDTO.getNumber())
-                .complement(addressRequestDTO.getComplement())
-                .cep(addressRequestDTO.getCep())
-                .build();
-    }
 
 
 
