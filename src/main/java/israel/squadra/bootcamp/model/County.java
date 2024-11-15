@@ -21,7 +21,7 @@ public class County {
     @Column(name = "CODIGO_MUNICIPIO")
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "CODIGO_UF")
     private Uf uf;
 

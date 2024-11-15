@@ -92,6 +92,18 @@ public class UfServiceImpl implements UfService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<UfRequestDTO> deleteUf(Integer id) {
+        Uf model = repository.findById(id)
+                .orElseThrow(() -> new DomainException("UF "+ id +" não encontrado", HttpStatus.NOT_FOUND));
+
+        repository.delete(model);
+
+        return getAll().stream()
+                .map(uf -> modelMapper.map(uf, UfRequestDTO.class))
+                .collect(Collectors.toList());
+    }
+
     private void validateCreateUf(Uf uf){
 
         if (repository.existsBySigla(uf.getSigla())){

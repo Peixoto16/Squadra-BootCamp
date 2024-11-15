@@ -10,6 +10,7 @@ public interface UfService {
     void create(Uf uf);
     List<Uf> getAll();
     void update(Uf uf);
+    List<UfRequestDTO> deleteUf(Integer id);
     Optional<Uf> getById(Integer id);
     Object getAllParamsUf(String name, Integer status, String sigla, Integer id);
     List<UfRequestDTO> createUf(UfRequestDTO ufRequestDTO);

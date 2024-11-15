@@ -36,5 +36,10 @@ public class UfController {
         return ResponseEntity.ok(ufs);
     }
 
+    @DeleteMapping
+    public ResponseEntity<List<UfRequestDTO>> delete(@RequestParam(value = "codigoUF", required = false) Integer id){
+        List<UfRequestDTO> ufs = service.deleteUf(id);
+        return ResponseEntity.ok(ufs);
+    }
 
 }

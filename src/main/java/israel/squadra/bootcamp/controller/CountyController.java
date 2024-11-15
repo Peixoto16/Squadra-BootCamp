@@ -30,9 +30,9 @@ public class CountyController {
     }
    @GetMapping
    public ResponseEntity <Object> getAll(@RequestParam(value = "nome", required = false) String nome,
-           @RequestParam(value ="status", required = false) Integer status,
-           @RequestParam(value ="codigoMunicipio", required = false) Integer id,
-           @RequestParam(value = "codigoUF", required = false) Integer ufId) {
+                                         @RequestParam(value ="status", required = false) Integer status,
+                                         @RequestParam(value ="codigoMunicipio", required = false) Integer id,
+                                         @RequestParam(value = "codigoUF", required = false) Integer ufId) {
        Object countys = service.getAllParamsCounty(nome, status, id, ufId);
        return ResponseEntity.ok(countys);
    }

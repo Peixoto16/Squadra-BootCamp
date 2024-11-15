@@ -27,7 +27,7 @@ public class Address {
     @JoinColumn(name = "CODIGO_PESSOA")
     private Person person;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "CODIGO_BAIRRO")
     private District district;
 
