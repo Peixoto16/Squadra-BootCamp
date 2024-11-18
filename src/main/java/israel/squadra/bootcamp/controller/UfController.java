@@ -2,6 +2,7 @@ package israel.squadra.bootcamp.controller;
 
 import israel.squadra.bootcamp.dto.request.UfRequestDTO;
 import israel.squadra.bootcamp.service.UfService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,13 +26,13 @@ public class UfController {
     }
 
     @PostMapping
-    public ResponseEntity<List<UfRequestDTO>> create(@RequestBody UfRequestDTO ufRequestDTO) {
+    public ResponseEntity<List<UfRequestDTO>> create(@RequestBody @Valid UfRequestDTO ufRequestDTO) {
         List<UfRequestDTO> ufs = service.createUf(ufRequestDTO);
         return ResponseEntity.ok(ufs);
     }
 
     @PutMapping
-    public ResponseEntity<List<UfRequestDTO>> update(@RequestBody UfRequestDTO ufRequestDTO) {
+    public ResponseEntity<List<UfRequestDTO>> update(@RequestBody @Valid UfRequestDTO ufRequestDTO) {
         List<UfRequestDTO> ufs = service.updateUf(ufRequestDTO);
         return ResponseEntity.ok(ufs);
     }

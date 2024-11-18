@@ -130,11 +130,7 @@ public class UfServiceImpl implements UfService {
 
     private void validateUf(Uf uf) {
 
-        CheckValidate.checkRequiredInitials(uf.getSigla());
-
-        CheckValidate.checkInitialsLength(uf.getSigla());
-
-        CheckValidate.checkRequiredName(uf.getNome());
+        CheckValidate.checkSiglaLength(uf.getSigla());
 
         CheckValidate.checkNameLength(uf.getNome(), 60);
 

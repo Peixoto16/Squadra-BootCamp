@@ -119,8 +119,6 @@ public class DistrictServiceImpl implements DistrictService {
                     + ", não é possível ter dois bairros com mesmo nome na mesma cidade.");
         }
 
-        CheckValidate.checkRequiredName(district.getNome());
-
         CheckValidate.checkNameLength(district.getNome(), 256);
 
         CheckValidate.checkRequiredStatus(district.getStatus());

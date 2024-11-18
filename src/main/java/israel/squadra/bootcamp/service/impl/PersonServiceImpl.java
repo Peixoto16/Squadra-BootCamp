@@ -196,16 +196,6 @@ public class PersonServiceImpl implements PersonService {
                     + " já existe, impossível cadastrar.");
         }
 
-        CheckValidate.checkRequiredName(person.getNome());
-
-        CheckValidate.checkRequiredLastName(person.getLastName());
-
-        CheckValidate.checkRequiredAge(person.getAge());
-
-        CheckValidate.checkRequiredLogin(person.getLogin());
-
-        CheckValidate.checkRequiredPassword(person.getPassword());
-
         CheckValidate.checkLastNameLength(person.getNome(), 256);
 
         CheckValidate.checkLastNameLength(person.getLastName(), 256);

@@ -4,6 +4,7 @@ import israel.squadra.bootcamp.dto.request.CountyRequestDTO;
 import israel.squadra.bootcamp.dto.request.UfRequestDTO;
 import israel.squadra.bootcamp.model.County;
 import israel.squadra.bootcamp.service.CountyService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,13 +19,13 @@ public class CountyController {
     private final CountyService service;
 
     @PostMapping
-    public ResponseEntity<List<CountyRequestDTO>> create(@RequestBody CountyRequestDTO countyRequestDTO) {
+    public ResponseEntity<List<CountyRequestDTO>> create(@RequestBody @Valid CountyRequestDTO countyRequestDTO) {
         List<CountyRequestDTO> countys = service.createCountys(countyRequestDTO);
         return ResponseEntity.ok(countys);
     }
 
     @PutMapping
-    public ResponseEntity<List<CountyRequestDTO>> update(@RequestBody CountyRequestDTO countyRequestDTO) {
+    public ResponseEntity<List<CountyRequestDTO>> update(@RequestBody @Valid CountyRequestDTO countyRequestDTO) {
         List<CountyRequestDTO> countys = service.updateCountys(countyRequestDTO);
         return ResponseEntity.ok(countys);
     }

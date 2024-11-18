@@ -2,12 +2,10 @@ package israel.squadra.bootcamp.model;
 
 import israel.squadra.bootcamp.dto.response.DistrictResponseDTO;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

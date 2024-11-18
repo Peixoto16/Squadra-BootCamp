@@ -4,6 +4,7 @@ import israel.squadra.bootcamp.dto.request.DistrictRequestDTO;
 import israel.squadra.bootcamp.dto.request.PersonRequestDTO;
 import israel.squadra.bootcamp.dto.response.PersonResponseDTO;
 import israel.squadra.bootcamp.service.PersonService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,7 @@ public class PersonController {
 
 
     @PostMapping
-    public ResponseEntity <List<PersonRequestDTO>> create(@RequestBody PersonRequestDTO personRequestDTO){
+    public ResponseEntity <List<PersonRequestDTO>> create(@RequestBody @Valid PersonRequestDTO personRequestDTO){
         List<PersonRequestDTO> persons = service.createPerson(personRequestDTO);
         return ResponseEntity.ok(persons);
     }
@@ -38,7 +39,7 @@ public class PersonController {
     }
 
     @PutMapping
-    public ResponseEntity <List<PersonRequestDTO>> update(@RequestBody PersonRequestDTO personRequestDTO){
+    public ResponseEntity <List<PersonRequestDTO>> update(@RequestBody @Valid PersonRequestDTO personRequestDTO){
         List<PersonRequestDTO> persons = service.updatePerson(personRequestDTO);
         return ResponseEntity.ok(persons);
     }

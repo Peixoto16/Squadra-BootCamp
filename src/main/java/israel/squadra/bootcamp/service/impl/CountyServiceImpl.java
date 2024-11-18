@@ -117,8 +117,6 @@ public class CountyServiceImpl implements CountyService {
                     + ". Não é permitido cadastrar duas cidades com o mesmo nome no mesmo estado.");
         }
 
-        CheckValidate.checkRequiredName(county.getNome());
-
         CheckValidate.checkNameLength(county.getNome(), 256);
 
         CheckValidate.checkRequiredStatus(county.getStatus());

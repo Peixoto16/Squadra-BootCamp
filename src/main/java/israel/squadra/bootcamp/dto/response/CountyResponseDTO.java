@@ -2,12 +2,10 @@ package israel.squadra.bootcamp.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import israel.squadra.bootcamp.dto.request.UfRequestDTO;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

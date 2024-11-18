@@ -1,12 +1,12 @@
 package israel.squadra.bootcamp.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -16,21 +16,27 @@ public class AddressRequestDTO {
     @JsonProperty("codigoEndereco")
     private Integer id;
 
+    @NotNull
     @JsonProperty("codigoPessoa")
     private Integer personId;
 
+    @NotNull
     @JsonProperty("codigoBairro")
     private Integer districtId;
 
+    @NotBlank
     @JsonProperty("nomeRua")
     private String street;
 
+    @NotBlank
     @JsonProperty("numero")
     private String number;
 
+    @NotBlank
     @JsonProperty("complemento")
     private String complement;
 
+    @NotBlank
     @JsonProperty("cep")
     private String cep;
 

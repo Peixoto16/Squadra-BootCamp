@@ -6,21 +6,9 @@ import org.springframework.util.StringUtils;
 
 public class CheckValidate {
 
-    public static void checkRequiredLogin(String login) {
-        if (!StringUtils.hasText(login)) {
-            throw new DomainException("O campo 'login' não pode estar vazio.");
-        }
-    }
-
     public static void checkRequiredStatus(int status) {
         if (status != 1 && status != 2) {
             throw new DomainException("O status deve ser 1 (ATIVO) ou 2 (DESATIVADO).");
-        }
-    }
-
-    public static void checkRequiredPassword(String password) {
-        if (!StringUtils.hasText(password)) {
-            throw new DomainException("O campo 'senha' é obrigatório.");
         }
     }
 
@@ -42,33 +30,9 @@ public class CheckValidate {
         }
     }
 
-    public static void checkInitialsLength(String initials) {
-        if (initials.length() > 3) {
+    public static void checkSiglaLength(String sigla) {
+        if (sigla.length() > 3) {
             throw new DomainException("A sigla deve ter até 3 caracteres.");
-        }
-    }
-
-    public static void checkRequiredInitials(String initials) {
-        if (!StringUtils.hasText(initials)) {
-            throw new DomainException("A sigla é obrigatória.");
-        }
-    }
-
-    public static void checkRequiredName(String name) {
-        if (!StringUtils.hasText(name)) {
-            throw new DomainException("O nome é um campo obrigatório.");
-        }
-    }
-
-    public static void checkRequiredLastName(String lastName) {
-        if (!StringUtils.hasText(lastName)) {
-            throw new DomainException("O sobrenome não pode estar vazio.");
-        }
-    }
-
-    public static void checkRequiredAge(Integer age) {
-        if (age == 0) {
-            throw new DomainException("A idade é um campo necessário.");
         }
     }
 
@@ -85,18 +49,6 @@ public class CheckValidate {
     }
 
     public static void validateAddress(Address address) {
-
-        if (!StringUtils.hasText(address.getStreet())){
-            throw new DomainException("O campo 'Rua' é obrigatório.");
-        }
-
-        if (!StringUtils.hasText(address.getCep())){
-            throw new DomainException("O campo 'CEP' é obrigatório.");
-        }
-
-        if (!StringUtils.hasText(address.getNumber())){
-            throw new DomainException("O campo 'Número' é obrigatório.");
-        }
 
         if (address.getStreet().length() > 256){
             throw new DomainException("O campo 'Rua' deve conter no máximo 256 caracteres.");
