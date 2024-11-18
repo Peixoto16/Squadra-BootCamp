@@ -2,7 +2,6 @@ package israel.squadra.bootcamp.service.impl;
 
 import israel.squadra.bootcamp.controller.exception.DomainException;
 import israel.squadra.bootcamp.dto.request.AddressRequestDTO;
-import israel.squadra.bootcamp.dto.request.DistrictRequestDTO;
 import israel.squadra.bootcamp.dto.request.PersonRequestDTO;
 import israel.squadra.bootcamp.model.Address;
 import israel.squadra.bootcamp.model.District;
@@ -13,7 +12,6 @@ import israel.squadra.bootcamp.service.DistrictService;
 import israel.squadra.bootcamp.service.PersonService;
 import israel.squadra.bootcamp.service.excepValidate.CheckValidate;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
@@ -34,20 +32,22 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public Person create(Person person) {
         validatePerson(person);
-      return repository.save(person);
+        return save(person);
+    }
+
+    @Override
+    public Person update(Person person) {
+        validatePerson(person);
+        return save(person);
+    }
+    private Person save(Person person) {
+        return repository.save(person);
     }
 
     @Override
     public List<Person> getAll() {
         return repository.findAll();
     }
-
-    @Override
-    public void update(Person person) {
-        validatePerson(person);
-        repository.save(person);
-    }
-
     @Override
     public Optional<Person> getById(Integer id) {
         return repository.findById(id);
@@ -99,12 +99,12 @@ public class PersonServiceImpl implements PersonService {
         Person person = create(model);
 
         List<Address> addresses = personRequestDTO.getAddressRequestDTO().stream()
-                .map(ad -> createAddress(ad, person))
+                .map(a -> createAddress(a, person))
                 .peek(CheckValidate::validateAddress)
                 .collect(Collectors.toList());
 
         person.setAddress(addresses);
-        update(person);
+        save(model);
 
         return getAll().stream()
                 .map(Person::toDTO)

@@ -46,9 +46,17 @@ public class ControllerAdviceApp {
                 .map(fieldError -> "Campo '" + fieldError.getField() + "' " + fieldError.getDefaultMessage())
                 .collect(Collectors.toList());
     }
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<ReturnError> handleGeneralException(RuntimeException ex) {
-        String message = "Ocorreu um erro interno no servidor. Verifique o codigo e tente novamente !";
+
+    @ExceptionHandler(NullPointerException.class)
+    public ResponseEntity<ReturnError> handleNullPointerException(NullPointerException ex) {
+        String message = "O campo '" + ex.getMessage() + "' está ausente. Verifique os dados enviados.";
+        ReturnError returnErrors = new ReturnError(new ResponseStatusException(HttpStatus.BAD_REQUEST, message));
+        return new ResponseEntity<>(returnErrors, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ReturnError> handleGeneralException(Exception ex) {
+        String message = "Erro interno no servidor. Verifique o codigo e tente novamente !";
         ReturnError returnError = new ReturnError(new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, message));
         return new ResponseEntity<>(returnError, HttpStatus.INTERNAL_SERVER_ERROR);
     }

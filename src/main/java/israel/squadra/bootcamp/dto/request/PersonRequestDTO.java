@@ -25,7 +25,7 @@ public class PersonRequestDTO {
     @JsonProperty("sobrenome")
     private String lastName;
 
-    @NotBlank
+    @NotNull
     @JsonProperty("idade")
     private Integer age;
 
