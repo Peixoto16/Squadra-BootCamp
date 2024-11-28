@@ -1,6 +1,5 @@
 package israel.squadra.bootcamp.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import israel.squadra.bootcamp.dto.response.AddressResponseDTO;
 import jakarta.persistence.*;
 import lombok.*;
@@ -25,7 +24,7 @@ public class Address {
     @JoinColumn(name = "CODIGO_PESSOA")
     private Person person;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "CODIGO_BAIRRO")
     private District district;
 

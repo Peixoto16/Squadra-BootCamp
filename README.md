@@ -12,6 +12,7 @@ API que permita registrar, atualizar e consultar (CRUD) pessoas e seus endereço
 - Maven
 - JPA
 - Swagger
+- Git
 
 ## CONSIDERAÇÕES GERAIS:
 

@@ -1,8 +1,6 @@
 package israel.squadra.bootcamp.controller;
 
-import israel.squadra.bootcamp.dto.request.DistrictRequestDTO;
 import israel.squadra.bootcamp.dto.request.PersonRequestDTO;
-import israel.squadra.bootcamp.dto.response.PersonResponseDTO;
 import israel.squadra.bootcamp.service.PersonService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +22,6 @@ public class PersonController {
         List<PersonRequestDTO> persons = service.createPerson(personRequestDTO);
         return ResponseEntity.ok(persons);
     }
-
 
     @GetMapping
     public ResponseEntity <Object> getAll(@RequestParam(value = "codigoPessoa", required = false) Integer id,

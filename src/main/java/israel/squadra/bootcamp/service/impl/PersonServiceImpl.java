@@ -24,7 +24,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PersonServiceImpl implements PersonService {
 
-
     private final PersonRepository repository;
     private final AddressService addressService;
     private final DistrictService districtService;
@@ -32,18 +31,13 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public Person create(Person person) {
         validatePerson(person);
-        return save(person);
+        return repository.save(person);
     }
-
     @Override
     public Person update(Person person) {
         validatePerson(person);
-        return save(person);
-    }
-    private Person save(Person person) {
         return repository.save(person);
     }
-
     @Override
     public List<Person> getAll() {
         return repository.findAll();
@@ -66,7 +60,6 @@ public class PersonServiceImpl implements PersonService {
                 .status(status)
                 .build();
         List<Person> selectPerson = repository.findAll(Example.of(select));
-
 
         if (!selectPerson.isEmpty() && isPersonFilterByOnlyId(select)) {
             return selectPerson.stream().findFirst().map(Person::toDTOWithAddress);
@@ -99,12 +92,12 @@ public class PersonServiceImpl implements PersonService {
         Person person = create(model);
 
         List<Address> addresses = personRequestDTO.getAddressRequestDTO().stream()
-                .map(a -> createAddress(a, person))
+                .map(adres -> createAddress(adres, person))
                 .peek(CheckValidate::validateAddress)
                 .collect(Collectors.toList());
 
         person.setAddress(addresses);
-        save(model);
+        create(model);
 
         return getAll().stream()
                 .map(Person::toDTO)
@@ -126,8 +119,14 @@ public class PersonServiceImpl implements PersonService {
         model.setStatus(personRequestDTO.getStatus());
 
         List<Address> addresses = personRequestDTO.getAddressRequestDTO().stream()
-                .map(dto -> createOrUpdate(model, dto))  // Cria ou atualiza o endereço
-                .peek(CheckValidate::validateAddress)    // Valida o endereço
+                .map(dto -> {
+                    if (dto.getId() != null && dto.getId() > 0) {
+                        return updateAddress(dto, model.getAddress());
+                    } else {
+                        return createAddress(dto, model);
+                    }
+                })
+                .peek(CheckValidate::validateAddress)
                 .collect(Collectors.toList());
 
         List<Address> addressToRemove = model.getAddress().stream()
@@ -144,15 +143,6 @@ public class PersonServiceImpl implements PersonService {
         return getAll().stream()
                 .map(Person::toDTO)
                 .collect(Collectors.toList());
-    }
-
-    private Address createOrUpdate(Person model, AddressRequestDTO requestDTO) {
-
-        if (requestDTO.getId() == null || requestDTO.getId() == 0) {
-            return createAddress(requestDTO, model);
-        }
-
-        return updateAddress(requestDTO, model.getAddress());
     }
 
     private Address updateAddress(AddressRequestDTO addressRequestDTO, List<Address> addresses) {
@@ -190,8 +180,7 @@ public class PersonServiceImpl implements PersonService {
     private void validatePerson(Person person){
 
         if ((person.getId() == null && repository.existsByLogin(person.getLogin())) ||
-                (repository.existsByLoginAndId(person.getLogin(), person.getId()))) {
-
+                (person.getId() != null && repository.existsByLoginAndIdNot(person.getLogin(), person.getId()))) {
             throw new DomainException("Login " + person.getLogin()
                     + " já existe, impossível cadastrar.");
         }
@@ -208,10 +197,6 @@ public class PersonServiceImpl implements PersonService {
 
         CheckValidate.checkRequiredStatus(person.getStatus());
     }
-
-
-
-
 
 }
 

@@ -8,8 +8,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PersonRepository extends JpaRepository<Person, Integer> {
 
-    boolean existsByLoginAndId(String login, Integer id);
+    boolean existsByLoginAndIdNot(String login, Integer id);
     boolean existsByLogin(String login);
+
 
 
 }

@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 public class ControllerAdviceApp {
 
     @ExceptionHandler(ResponseStatusException.class)
-    @ResponseStatus
     public ResponseEntity<ReturnError> handlerResponseStatusException(ResponseStatusException ex) {
         return new ResponseEntity<>(new ReturnError(ex), ex.getStatusCode());
     }
@@ -26,14 +25,14 @@ public class ControllerAdviceApp {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ReturnError> handleHttpMessageNotReadable(HttpMessageNotReadableException ex) {
         String message = "Erro de formatação no JSON, verifique e tente novamente!";
-        ReturnError returnErros = new ReturnError(new ResponseStatusException(HttpStatus.BAD_REQUEST, message));
-        return new ResponseEntity<>(returnErros, HttpStatus.BAD_REQUEST);
+        ReturnError returnErro = new ReturnError(new ResponseStatusException(HttpStatus.BAD_REQUEST, message));
+        return new ResponseEntity<>(returnErro, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ReturnError> handleValidationExceptions(MethodArgumentNotValidException ex) {
         List<String> validationMessages = extractValidationMessages(ex);
-
+        // Metodo criado especialmente para o Wandin aula pratica 26/11
         String errorMessage = validationMessages.isEmpty()
                 ? "Erro de validação desconhecido"
                 : String.join(", ", validationMessages);
@@ -50,8 +49,15 @@ public class ControllerAdviceApp {
     @ExceptionHandler(NullPointerException.class)
     public ResponseEntity<ReturnError> handleNullPointerException(NullPointerException ex) {
         String message = "O campo '" + ex.getMessage() + "' está ausente. Verifique os dados enviados.";
-        ReturnError returnErrors = new ReturnError(new ResponseStatusException(HttpStatus.BAD_REQUEST, message));
-        return new ResponseEntity<>(returnErrors, HttpStatus.BAD_REQUEST);
+        ReturnError returnError = new ReturnError(new ResponseStatusException(HttpStatus.BAD_REQUEST, message));
+        return new ResponseEntity<>(returnError, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ReturnError> handleIllegalArgumentException(IllegalArgumentException ex){
+        String message = "O campo '" + ex.getMessage() + "' está ausente. Verifique os dados enviados.";
+        ReturnError returnError = new ReturnError(new ResponseStatusException(HttpStatus.BAD_REQUEST, message));
+        return new ResponseEntity<>(returnError, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(Exception.class)
