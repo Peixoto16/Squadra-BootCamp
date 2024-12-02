@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -63,9 +64,20 @@ public class CountyServiceImpl implements CountyService {
                 .build();
         List<County> selectCounty = repository.findAll(Example.of(select));
 
+        if (isCountySelectBy(select) && !selectCounty.isEmpty()) {
+            return selectCounty.stream().findFirst().map(city -> modelMapper.map(city, CountyRequestDTO.class));
+        }
+
         return selectCounty.stream()
                 .map(county -> modelMapper.map(county, CountyRequestDTO.class))
                 .collect(Collectors.toList());
+    }
+
+    private boolean isCountySelectBy(County select) {
+        return (Objects.nonNull(select.getId())
+                || Objects.nonNull(select.getNome()))
+                || (Objects.nonNull(select.getStatus())
+                && Objects.nonNull(select.getUf()));
     }
 
     @Override

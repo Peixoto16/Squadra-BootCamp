@@ -4,8 +4,8 @@ import israel.squadra.bootcamp.dto.response.AddressResponseDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Getter
-@Setter
+@Data
+@EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

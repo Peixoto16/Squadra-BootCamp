@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -55,10 +56,21 @@ public class UfServiceImpl implements UfService {
                 .build();
         List<Uf> selectUfs = repository.findAll(Example.of(select));
 
+        if (isUfSelectBy(select) && !selectUfs.isEmpty()) {
+            return selectUfs.stream().findFirst().map(uf -> modelMapper.map(uf, UfRequestDTO.class));
+        }
+
         return selectUfs.stream()
                 .map(uf -> modelMapper.map(uf, UfRequestDTO.class))
                 .collect(Collectors.toList());
     }
+
+    private boolean isUfSelectBy(Uf select) {
+        return Objects.nonNull(select.getId())
+                || Objects.nonNull(select.getSigla())
+                || Objects.nonNull(select.getNome());
+    }
+
 
     @Override
     public List<UfRequestDTO> createUf(UfRequestDTO ufRequestDTO) {

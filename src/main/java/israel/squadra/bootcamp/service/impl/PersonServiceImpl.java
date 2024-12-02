@@ -12,6 +12,7 @@ import israel.squadra.bootcamp.service.DistrictService;
 import israel.squadra.bootcamp.service.PersonService;
 import israel.squadra.bootcamp.service.excepValidate.CheckValidate;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
@@ -61,15 +62,14 @@ public class PersonServiceImpl implements PersonService {
                 .build();
         List<Person> selectPerson = repository.findAll(Example.of(select));
 
-        if (!selectPerson.isEmpty() && isPersonFilterByOnlyId(select)) {
+        if (isPersonSelectBy(select) && !selectPerson.isEmpty()) {
             return selectPerson.stream().findFirst().map(Person::toDTOWithAddress);
         }
 
         return selectPerson.stream()
                 .map(Person::toDTO);
     }
-
-    private boolean isPersonFilterByOnlyId(Person select) {
+    private boolean isPersonSelectBy(Person select) {
         return select.getId() != null && (Objects.isNull(select.getNome())
                 && Objects.isNull(select.getLastName())
                 && Objects.isNull(select.getAge())
@@ -95,7 +95,7 @@ public class PersonServiceImpl implements PersonService {
                 .map(adres -> createAddress(adres, person))
                 .peek(CheckValidate::validateAddress)
                 .collect(Collectors.toList());
-
+        
         person.setAddress(addresses);
         create(model);
 
