@@ -71,7 +71,6 @@ public class PersonServiceImpl implements PersonService {
     }
     private boolean isPersonSelectBy(Person select) {
         return select.getId() != null && (Objects.isNull(select.getNome())
-                && Objects.isNull(select.getLastName())
                 && Objects.isNull(select.getAge())
                 && Objects.isNull(select.getLogin())
                 && Objects.isNull(select.getPassword())
