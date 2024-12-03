@@ -80,6 +80,10 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public List<PersonRequestDTO> createPerson(PersonRequestDTO personRequestDTO) {
 
+        if (personRequestDTO.getAddressRequestDTO() == null || personRequestDTO.getAddressRequestDTO().isEmpty()) {
+            throw new DomainException("É obrigatório informar pelo menos um endereço valido.");
+        }
+
         Person model = Person.builder()
                 .nome(personRequestDTO.getNome())
                 .lastName(personRequestDTO.getLastName())
@@ -88,14 +92,13 @@ public class PersonServiceImpl implements PersonService {
                 .password(personRequestDTO.getPassword())
                 .status(personRequestDTO.getStatus())
                 .build();
-        Person person = create(model);
 
         List<Address> addresses = personRequestDTO.getAddressRequestDTO().stream()
-                .map(adres -> createAddress(adres, person))
+                .map(adres -> createAddress(adres, model))
                 .peek(CheckValidate::validateAddress)
                 .collect(Collectors.toList());
-        
-        person.setAddress(addresses);
+
+        model.setAddress(addresses);
         create(model);
 
         return getAll().stream()

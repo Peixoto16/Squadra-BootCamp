@@ -8,6 +8,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
@@ -32,7 +33,7 @@ public class ControllerAdviceApp {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ReturnError> handleValidationExceptions(MethodArgumentNotValidException ex) {
         List<String> validationMessages = extractValidationMessages(ex);
-        // Metodo criado especialmente para o Wandin aula pratica 26/11
+
         String errorMessage = validationMessages.isEmpty()
                 ? "Erro de validação desconhecido"
                 : String.join(", ", validationMessages);
@@ -53,11 +54,12 @@ public class ControllerAdviceApp {
         return new ResponseEntity<>(returnError, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ReturnError> handleIllegalArgumentException(IllegalArgumentException ex){
-        String message = "O campo '" + ex.getMessage() + "' está ausente. Verifique os dados enviados.";
-        ReturnError returnError = new ReturnError(new ResponseStatusException(HttpStatus.BAD_REQUEST, message));
-        return new ResponseEntity<>(returnError, HttpStatus.BAD_REQUEST);
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ReturnError> handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException ex) {
+        String invalidValue = String.valueOf(ex.getValue());
+        String message = "O campo '" + ex.getName() + "' recebeu um valor inválido: '" + invalidValue + "'.";
+        ReturnError returnErro = new ReturnError(new ResponseStatusException(HttpStatus.BAD_REQUEST, message));
+        return new ResponseEntity<>(returnErro, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(Exception.class)
@@ -66,6 +68,5 @@ public class ControllerAdviceApp {
         ReturnError returnError = new ReturnError(new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, message));
         return new ResponseEntity<>(returnError, HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
 
 }
