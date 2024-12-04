@@ -16,7 +16,7 @@ public class AddressRequestDTO {
     @JsonProperty("codigoEndereco")
     private Integer id;
 
-    @NotNull
+
     @JsonProperty("codigoPessoa")
     private Integer personId;
 
