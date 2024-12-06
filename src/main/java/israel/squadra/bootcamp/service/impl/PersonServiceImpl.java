@@ -80,6 +80,7 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public List<PersonRequestDTO> createPerson(PersonRequestDTO personRequestDTO) {
 
+        //Validação de campo endereço vazio, obrigatorio tem pelo menos um endereço valido.
         if (personRequestDTO.getAddressRequestDTO() == null || personRequestDTO.getAddressRequestDTO().isEmpty()) {
             throw new DomainException("É obrigatório informar pelo menos um endereço valido.");
         }

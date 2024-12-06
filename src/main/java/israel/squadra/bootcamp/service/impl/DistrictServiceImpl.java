@@ -77,10 +77,7 @@ public class DistrictServiceImpl implements DistrictService {
     }
 
     private boolean isDistrictSelectBy(District select) {
-        return Objects.nonNull(select.getId()) ||
-                (Objects.nonNull(select.getCounty())
-                && Objects.nonNull(select.getStatus())
-                && Objects.nonNull(select.getNome()));
+        return Objects.nonNull(select.getId());
     }
 
     @Override

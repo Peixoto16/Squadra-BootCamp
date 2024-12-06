@@ -74,10 +74,7 @@ public class CountyServiceImpl implements CountyService {
     }
 
     private boolean isCountySelectBy(County select) {
-        return  Objects.nonNull(select.getId())
-                || (Objects.nonNull(select.getStatus())
-                && Objects.nonNull(select.getUf())
-                && Objects.nonNull(select.getNome()));
+        return  Objects.nonNull(select.getId());
     }
 
     @Override
